@@ -1,0 +1,23 @@
+name: telegram message
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: send message using with
+      uses: ./actions/send-telegram-message
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+          -- New deployment --
+          Repository: {{ repo }}
+          Commit: {{ commit.sha }}
+          Message: ${{ github.event.head_commit.message }}
